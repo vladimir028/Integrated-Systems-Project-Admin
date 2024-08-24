@@ -16,7 +16,7 @@ namespace AdminApplication.Controllers
         public IActionResult Index()
         {
             HttpClient client = new HttpClient();
-            string URL = "https://localhost:44341/api/Admin/GetAllOrders";
+            string URL = "http://localhost:65124/api/Admin/GetAllOrders";
             HttpResponseMessage response = client.GetAsync(URL).Result;
 
             var data = response.Content.ReadAsAsync<List<Order>>().Result;
@@ -26,7 +26,7 @@ namespace AdminApplication.Controllers
         public IActionResult Details(Guid Id)
         {
             HttpClient client = new HttpClient();
-            string URL = "https://localhost:44341/api/Admin/GetDetailsForOrder";
+            string URL = "http://localhost:65124/api/Admin/GetDetailsForOrder";
             var model = new
             {
                 Id = Id
@@ -42,7 +42,7 @@ namespace AdminApplication.Controllers
         public FileContentResult CreateInvoice(Guid Id)
         {
             HttpClient client = new HttpClient();
-            string URL = "https://localhost:44341/api/Admin/GetDetailsForOrder";
+            string URL = "http://localhost:65124/api/Admin/GetDetailsForOrder";
             var model = new
             {
                 Id = Id
@@ -55,16 +55,18 @@ namespace AdminApplication.Controllers
 
             var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Invoice.docx");
             var document = DocumentModel.Load(templatePath);
+            document.Content.Replace("{{Date}}", DateTime.Today.ToString("dd/MM/yyyy"));
             document.Content.Replace("{{OrderNumber}}", data.Id.ToString());
-            document.Content.Replace("{{UserName}}", data.Owner.UserName);
+            //document.Content.Replace("{{FirsName}}", data.EShopApplicationUser.FirstName);
+            document.Content.Replace("{{UserName}}", data.EShopApplicationUser.UserName);
             StringBuilder sb = new StringBuilder();
             var total = 0;
-            foreach (var item in data.ProductInOrders)
+            foreach (var item in data.TravelPackageInOrders)
             {
-                sb.Append("Product " + item.OrderedProduct.Movie.MovieName + " with quantity " + item.Quantity + " with price " + item.OrderedProduct.Price + "$");
-                total += (item.Quantity * Convert.ToInt32(item.OrderedProduct.Price));
+                sb.Append("Travel Package " + item.TravelPackage.Name + " with total Number of travelers:  " + item.NumberOfTravelers + " with price " + item.TravelPackage.Price + "$\n");
+                total += (item.NumberOfTravelers * Convert.ToInt32(item.TravelPackage.Price));
             }
-            document.Content.Replace("{{ProductList}}", sb.ToString());
+            document.Content.Replace("{{TravelPackageList}}", sb.ToString());
             document.Content.Replace("{{TotalPrice}}", total.ToString() + "$");
 
             var stream = new MemoryStream();
@@ -85,9 +87,11 @@ namespace AdminApplication.Controllers
 
                 worksheet.Cell(1, 1).Value = "Order ID";
                 worksheet.Cell(1, 2).Value = "Customer Username";
+                worksheet.Cell(1, 3).Value = "Customer First name";
+                worksheet.Cell(1, 4).Value = "Customer Last name";
 
                 HttpClient client = new HttpClient();
-                string URL = "https://localhost:44341/api/Admin/GetAllOrders";
+                string URL = "http://localhost:65124/api/Admin/GetAllOrders";
                 HttpResponseMessage response = client.GetAsync(URL).Result;
 
                 var data = response.Content.ReadAsAsync<List<Order>>().Result;
@@ -96,13 +100,19 @@ namespace AdminApplication.Controllers
                 {
                     var order = data[i];
                     worksheet.Cell(i + 2, 1).Value = order.Id.ToString();
-                    worksheet.Cell(i + 2, 2).Value = order.Owner.UserName;
+                    worksheet.Cell(i + 2, 2).Value = order.EShopApplicationUser.UserName;
+                    worksheet.Cell(i + 2, 3).Value = order.EShopApplicationUser.FirstName;
+                    worksheet.Cell(i + 2, 4).Value = order.EShopApplicationUser.LastName;
 
-                    for (int j = 0; j < order.ProductInOrders.Count(); j++)
+                    for (int j = 0; j < order.TravelPackageInOrders.Count(); j++)
                     {
-                        worksheet.Cell(1, j + 3).Value = "Product - " + (j + 1);
-                        worksheet.Cell(i + 2, j + 3).Value = order.ProductInOrders.ElementAt(j).OrderedProduct.Movie.MovieName;
+                        worksheet.Cell(1, j + 5).Value = "Travel Package - " + (j + 1);
+                        worksheet.Cell(i + 2, j + 5).Value = order.TravelPackageInOrders.ElementAt(j).TravelPackage.Name;
 
+                        //worksheet.Cell(1, j + 6).Value = "Travel Package - " + (j + 1) + "Itinerary Dates";
+                        //var itinerary = order.TravelPackageInOrders.ElementAt(j).TravelPackage.Itinerary;
+                        //worksheet.Cell(i + 2, j + 6).Value = itinerary.StartDate.ToString("dd/MM/yyyy") + " - " + itinerary.EndDate.;
+                       
                     }
                 }
 

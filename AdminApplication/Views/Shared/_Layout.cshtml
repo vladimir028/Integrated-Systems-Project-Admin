@@ -10,31 +10,22 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AdminApplication</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+        <nav class="navbar navbar-expand-lg navbar-light bg-light py-3 shadow-sm mb-2">
+            <div class="container">
+                <a class="navbar-brand fw-bold text-uppercase" asp-area="" asp-controller="Home" asp-action="Index">PVSTravel</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Orders</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Movie" asp-action="Index">Import Movies</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Import Users</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">View All Orders</a>
                         </li>
                     </ul>
+                    <div class="d-flex">
+                       <a>Hello Admin</a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -45,9 +36,26 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="bg-dark text-white text-center py-4 mt-5">
         <div class="container">
-            &copy; 2024 - AdminApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <div class="col">
+                    <h5>About Us</h5>
+                    <p>We offer the best travel packages to help you explore the world. Join us on your next adventure!</p>
+                </div>
+                <div class="col">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Home</a></li>
+                        <li><a href="/TravelPackages" class="text-white">Packages</a></li>
+                        <li><a href="#" class="text-white">Contact Us</a></li>
+                        <li><a href="#" class="text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <p class="mb-0">&copy; 2024 - Your Travel Company. All Rights Reserved.</p>
+            <p>Developed by Slavko, Predrag, and Vladimir</p>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

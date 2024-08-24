@@ -6,34 +6,71 @@
 
 @model AdminApplication.Models.Order
 
-<div class="container">
-    <div>
-        <a class="btn btn=success">Order for @Model.Owner.UserName</a>
+<div class="container my-4 text-center">
+    <div class="mb-3 p-4 bg-dark text-white rounded shadow-sm">
+        <h4 class="fw-bold text-center">Order for @Model.EShopApplicationUser.UserName, Order Id: @Model.Id</h4>
     </div>
 
-    @for(int i=0;i<Model.ProductInOrders.Count(); i++)
+    @for (int i = 0; i < Model.TravelPackageInOrders.Count(); i++)
     {
-        var item = Model.ProductInOrders.ElementAt(i).OrderedProduct;
-        if(i % 3 == 0)
-        {
-            @:<div class="row">
-        }
-        <div class="col-3 m-4">
-
-            <div class="card" style="width: 18rem; height: 35rem">
-                @* <img class="card-img-top" src="@item." alt="Card image cap"> *@
-                <div class="card-body">
-                    <h5 class="card-title">Movie Name: @item.Movie.MovieName</h5>
-                    <p class="card-text">>Movie Description: @item.Movie.MovieDescription</p>
-                    <h6>Price: @item.Price</h6>
+        var item = Model.TravelPackageInOrders.ElementAt(i).TravelPackage;
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div id="carousel-@item.Id" class="carousel slide w-100" data-bs-ride="false">
+                    <div class="carousel-inner">
+                        @for (int j = 0; j < item.Images.Count(); j++)
+                        {
+                            var img = item.Images.ElementAt(j);
+                            <div class="carousel-item @(j == 0 ? "active" : "")">
+                                <img src="@img" class="d-block w-100 fixed-size" alt="...">
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@item.Id" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-@item.Id" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
-
             </div>
-        </div>
+            <div class="col-md-6">
+                <div class="card mb-4 shadow-sm">
+                    <div style="background: linear-gradient(90deg, #00deb6, #009277); color: black;" class="card-header bg-info text-white">
+                        <h4 class="my-0 fw-bold"><b>Travel Package Name: </b> @item.Name</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><b>Travel Package Description: </b>@item.Description.Substring(0, Math.Min(200, item.Description.Length))...</p>
+                        <p class="card-text"><b>Travel Package Price: </b>$@item.Price</p>
+                        <p class="card-text"><b>Travel Package Route Starting Date: </b>@item.Itinerary.StartDate</p>
+                        <p class="card-text"><b>Travel Package Route Ending Date: </b>@item.Itinerary.EndDate</p>
+                        <p class="card-text"><b>Activities During This period</p>
+                    </div>
+                    <ul>
+                    @for (int j = 0; j < item.Itinerary.PlannedRoutes.Count(); j++)
+                    {
+                        var planningRoute = item.Itinerary.PlannedRoutes.ElementAt(j);
+                        @for (int k = 0; k < planningRoute.Activities.Count(); k++)
+                        {
+                            var activity = planningRoute.Activities.ElementAt(k);
+                            <li>@activity.ThingsToDo</li>
+                        }
+                    }
+                    </ul>
+                </div>
+               
+            </div>
 
-        if(i % 3 == 2)
-        {
-            @:</div>
-        }
+        </div>
     }
 </div>
+
+<style>
+    .fixed-size {
+        width: 500px;
+        height: 300px;
+        object-fit: cover;
+    }
+</style>
