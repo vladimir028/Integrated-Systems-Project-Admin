@@ -16,7 +16,7 @@ namespace AdminApplication.Controllers
         public IActionResult Index()
         {
             HttpClient client = new HttpClient();
-            string URL = "http://localhost:65124/api/Admin/GetAllOrders";
+            string URL = "https://pvstravel-dze7dmcxauf3csfd.eastus-01.azurewebsites.net/api/Admin/GetAllOrders";
             HttpResponseMessage response = client.GetAsync(URL).Result;
 
             var data = response.Content.ReadAsAsync<List<Order>>().Result;
@@ -26,7 +26,7 @@ namespace AdminApplication.Controllers
         public IActionResult Details(Guid Id)
         {
             HttpClient client = new HttpClient();
-            string URL = "http://localhost:65124/api/Admin/GetDetailsForOrder";
+            string URL = "https://pvstravel-dze7dmcxauf3csfd.eastus-01.azurewebsites.net/api/Admin/GetDetailsForOrder";
             var model = new
             {
                 Id = Id
@@ -42,7 +42,7 @@ namespace AdminApplication.Controllers
         public FileContentResult CreateInvoice(Guid Id)
         {
             HttpClient client = new HttpClient();
-            string URL = "http://localhost:65124/api/Admin/GetDetailsForOrder";
+            string URL = "https://pvstravel-dze7dmcxauf3csfd.eastus-01.azurewebsites.net/api/Admin/GetDetailsForOrder";
             var model = new
             {
                 Id = Id
@@ -91,7 +91,7 @@ namespace AdminApplication.Controllers
                 worksheet.Cell(1, 4).Value = "Customer Last name";
 
                 HttpClient client = new HttpClient();
-                string URL = "http://localhost:65124/api/Admin/GetAllOrders";
+                string URL = "https://pvstravel-dze7dmcxauf3csfd.eastus-01.azurewebsites.net/api/Admin/GetAllOrders";
                 HttpResponseMessage response = client.GetAsync(URL).Result;
 
                 var data = response.Content.ReadAsAsync<List<Order>>().Result;
